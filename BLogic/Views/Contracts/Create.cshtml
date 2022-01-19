@@ -1,0 +1,53 @@
+﻿@model BLogic.Models.Contracts.Contract
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Contract</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="EvidenceNumber" class="control-label"></label>
+                <input asp-for="EvidenceNumber" class="form-control" />
+                <span asp-validation-for="EvidenceNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClosureDate" class="control-label"></label>
+                <input asp-for="ClosureDate" class="form-control" />
+                <span asp-validation-for="ClosureDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ValidityDate" class="control-label"></label>
+                <input asp-for="ValidityDate" class="form-control" />
+                <span asp-validation-for="ValidityDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.FirstName" class="control-label"></label>
+                <input asp-for="Client.FirstName" class="form-control" />
+                <span asp-validation-for="Client.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Client.LastName" class="control-label"></label>
+                <input asp-for="Client.LastName" class="form-control" />
+                <span asp-validation-for="Client.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
