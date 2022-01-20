@@ -1,11 +1,11 @@
-﻿using BLogic.Models.Clients;
+﻿using BLogic.Models.Advisors;
+using BLogic.Models.Clients;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BLogic.Models.Contracts
 {
-    public class Contract
+    public class CreateContractViewModel
     {
         public int ContractId { get; set; }
         [Required(ErrorMessage = "Evidenční číslo musí být vyplněno.")]
@@ -20,9 +20,8 @@ namespace BLogic.Models.Contracts
         [DataType(DataType.Date)]
         public DateTime ValidityDate { get; set; }
 
-        //1:N (klient:smlouvy)
         public Client Client { get; set; }
-        //M:N (poradce:smlouva)
-        public ICollection<AdvisorContract> AdvisorContracts { get; set; }
+
+        public Advisor Advisor { get; set; }
     }
 }

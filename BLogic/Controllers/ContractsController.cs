@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using BLogic.Data;
 using BLogic.Models.Contracts;
 using BLogic.Models.Clients;
+using Microsoft.AspNetCore.Authorization;
+using BLogic.Models;
+using BLogic.Models.Advisors;
 
 namespace BLogic.Controllers
 {
@@ -23,7 +26,7 @@ namespace BLogic.Controllers
         // GET: Contracts
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Contract.ToListAsync());
+            return View(await _context.Contract.Include(c => c.Client).Include(ac => ac.AdvisorContracts).ThenInclude(a => a.Advisor).ToListAsync());
         }
 
         // GET: Contracts/Details/5
@@ -55,13 +58,20 @@ namespace BLogic.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ContractId,EvidenceNumber,ClosureDate,ValidityDate")] Contract contract, [Bind("FirstName,LastName")] Client client)
+        public async Task<IActionResult> Create(
+            [Bind("ContractId,EvidenceNumber,ClosureDate,ValidityDate")] Contract contract, 
+            [Bind("ClientId,FirstName,LastName,Email,Phone,BirthNumber,Age")] Client client,
+            [Bind("AdvisorId,FirstName,LastName,Email,Phone,BirthNumber,Age")]Advisor advisor)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(contract);//!!!!!!!!!!!!!!!!!!
                 _context.Add(client);
+                contract.Client = client;
+                _context.Add(contract);
+                _context.Add(advisor); //vyřešit přidání vícero poradců!!!!!
+                _context.Add(new AdvisorContract { Advisor = advisor, AdvisorId = advisor.AdvisorId, Contract = contract, ContractId = contract.ContractId });
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(contract);
