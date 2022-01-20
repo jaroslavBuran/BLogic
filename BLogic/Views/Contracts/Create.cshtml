@@ -1,0 +1,149 @@
+﻿@model BLogic.Models.Contracts.CreateContractViewModel
+
+@{
+    ViewData["Title"] = "Nová smlouva";
+}
+
+<form method="post">
+    <div class="row text-center"> 
+        <h1 class="mb-0">Nová smlouva</h1>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-3 col-md-1">
+            <hr class="mb-md-5"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-3">
+            <div class="form-group mb-2 mb-md-0">
+                <label asp-for="EvidenceNumber" class="control-label"></label>
+                <input asp-for="EvidenceNumber" class="form-control"/>
+                <span asp-validation-for="EvidenceNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="form-group mb-2 mb-md-0">
+                <label asp-for="ClosureDate" class="control-label"></label>
+                <input asp-for="ClosureDate" class="form-control"/>
+                <span asp-validation-for="ClosureDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="form-group mb-2 mb-md-0">
+                <label asp-for="ValidityDate" class="control-label"></label>
+                <input asp-for="ValidityDate" class="form-control"/>
+                <span asp-validation-for="ValidityDate" class="text-danger"></span>
+            </div>
+        </div>
+        <hr class="my-4" />
+    </div>
+    <div class="row">
+        <div class="col mb-2">
+            <h4>Klient</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-3">
+            <div class="form-group">
+                <label asp-for="Client.FirstName"></label>
+                <input asp-for="Client.FirstName" class="form-control" placeholder="Martin"/>
+                <span asp-validation-for="Client.FirstName" class="text-danger fw-bold"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="form-group">
+                <label asp-for="Client.LastName"></label>
+                <input asp-for="Client.LastName" class="form-control" placeholder="Novák"/>
+                <span asp-validation-for="Client.LastName" class="text-danger fw-bold"></span>
+            </div>
+        </div>
+        <div class="col-8 col-md-3">
+            <div class="form-group">
+                <label asp-for="Client.BirthNumber"></label>
+                <input asp-for="Client.BirthNumber" class="form-control" placeholder="1234567890"/>
+                <span asp-validation-for="Client.BirthNumber" class="text-danger fw-bold"></span>
+            </div>
+        </div>
+        <div class="col-4 col-md-3">
+            <div class="form-group">
+                <label asp-for="Client.Age"></label>
+                <input asp-for="Client.Age" class="form-control"/>
+                <span asp-validation-for="Client.Age" class="text-danger fw-bold"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="form-group">
+                <label asp-for="Client.Email"></label>
+                <input asp-for="Client.Email" class="form-control" placeholder="jmeno@domena.cz"/>
+                <span asp-validation-for="Client.Email" class="text-danger fw-bold"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="form-group">
+                <label asp-for="Client.Phone"></label>
+                <input asp-for="Client.Phone" class="form-control" placeholder="777000999"/>
+                <span asp-validation-for="Client.Phone" class="text-danger fw-bold"></span>
+            </div>
+        </div>
+        <hr class="my-4" />
+    </div>
+    <div class="row">
+        <div class="col mb-2">
+            <h4>Správce smlouvy</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-3">
+            <div class="form-group">
+                <label asp-for="Advisor.FirstName"></label>
+                <input asp-for="Advisor.FirstName" class="form-control" placeholder="Martin"/>
+                <span asp-validation-for="Advisor.FirstName" class="text-danger fw-bold"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="form-group">
+                <label asp-for="Advisor.LastName"></label>
+                <input asp-for="Advisor.LastName" class="form-control" placeholder="Novák"/>
+                <span asp-validation-for="Advisor.LastName" class="text-danger fw-bold"></span>
+            </div>
+        </div>
+        <div class="col-8 col-md-3">
+            <div class="form-group">
+                <label asp-for="Advisor.BirthNumber"></label>
+                <input asp-for="Advisor.BirthNumber" class="form-control" placeholder="1234567890"/>
+                <span asp-validation-for="Advisor.BirthNumber" class="text-danger fw-bold"></span>
+            </div>
+        </div>
+        <div class="col-4 col-md-3">
+            <div class="form-group">
+                <label asp-for="Advisor.Age"></label>
+                <input asp-for="Advisor.Age" class="form-control"/>
+                <span asp-validation-for="Advisor.Age" class="text-danger fw-bold"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="form-group">
+                <label asp-for="Advisor.Email"></label>
+                <input asp-for="Advisor.Email" class="form-control" placeholder="jmeno@domena.cz"/>
+                <span asp-validation-for="Advisor.Email" class="text-danger fw-bold"></span>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="form-group">
+                <label asp-for="Advisor.Phone"></label>
+                <input asp-for="Advisor.Phone" class="form-control" placeholder="777000999"/>
+                <span asp-validation-for="Advisor.Phone" class="text-danger fw-bold"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5 justify-content-center">
+        <div class="col text-center">
+            <button type="submit" class="btn btn-success btn-lg">Uložit</button>
+            <a asp-action="Index" class="btn btn-danger btn-lg">Zrušit</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,74 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model BLogic.Models.Authentication.LoginViewModel
+@inject SignInManager<IdentityUser> SignInManager
+
+@{
+    ViewData["Title"] = "Přihlášení";
+}
+
+<div class="container">
+    <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+    <div class="row mt-4">
+        <div class="col text-center">
+            <h1 class="mb-0">Přihlášení</h1>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-3 col-md-1">
+            <hr class="mb-md-5"/>
+        </div>
+    </div>
+    <div class="row justify-content-center text-center fw-bold mb-3">
+        <div class="col-12 col-md-4">
+            <div class="form-group">
+                <label asp-for="Email" class="mb-2"></label>
+                <input asp-for="Email" class="form-control text-center" placeholder="jmeno@email.cz"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center text-center fw-bold">
+        <div class="col-12 col-md-4">
+            <div class="form-group">
+                <label asp-for="Password" class="mb-2"></label>
+                <input asp-for="Password" class="form-control text-center" placeholder="SuperSilneHeslo"/>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center text-center fw-bold mb-4 mt-2">
+        <div class="col-12 col-md-4">
+            <div class="form-group">
+                <div class="checkbox">
+                    <label asp-for="RememberMe">
+                        <input asp-for="RememberMe" />
+                        @Html.DisplayNameFor(m => m.RememberMe)
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center text-center mb-4">
+        <div class="col">
+            <div class="form-group">
+                <button type="submit" class="btn btn-outline-primary btn-lg fw-bold">Přihlásit se</button>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center text-center mt-5">
+        <div class="col col-md-4">
+            <h4>Ještě nemáte svůj účet?</h4>
+            <div class="form-group fw-bold">
+                <p>
+                    <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" class="btn btn-outline-success">Registrovat</a>
+                </p>
+            </div>
+        </div>
+    </div>   
+    </form>
+</div>
+<!--implementace zapomenutého hesla?-->
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

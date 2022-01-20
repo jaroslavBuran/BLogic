@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Text;
 using BLogic.Models.Clients;
 using BLogic.Models;
+using BLogic.Models.Advisors;
+using BLogic.Models.Contracts;
 
 namespace BLogic.Data
 {
@@ -34,5 +36,11 @@ namespace BLogic.Data
                 .WithMany(c => c.AdvisorContracts)
                 .HasForeignKey(ac => ac.ContractId);
         }
+
+        public DbSet<BLogic.Models.Clients.Client> Client { get; set; }
+
+        public DbSet<BLogic.Models.Advisors.Advisor> Advisor { get; set; }
+
+        public DbSet<BLogic.Models.Contracts.Contract> Contract { get; set; }
     }
 }
