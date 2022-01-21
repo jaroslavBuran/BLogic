@@ -1,26 +1,26 @@
 ﻿@model IEnumerable<BLogic.Models.Contracts.Contract>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Seznam smluv";
 }
 
 <div class="row">
     <div class="col text-center">
-        <h1>Seznam smluv</h1>
+        <h1 class="mb-0">Seznam smluv</h1>
     </div>
 </div>
 <div class="row justify-content-center">
     <div class="col-3 col-md-1">
-        <hr class="mb-md-5"/>
+        <hr class="mb-md-4"/>
     </div>
 </div>
 <div class="row">
     <div class="col">
-        <a asp-action="Create" class="btn btn-primary">Přidat smlouvu</a>
+        <a asp-action="Create" class="btn btn-outline-primary">Přidat smlouvu</a>
     </div>
 </div>
 <div class="table-responsive-sm">
-    <table class="table table-striped">
+    <table class="table table-striped align-middle">
         <thead>
             <tr>
                 <th>
@@ -54,21 +54,42 @@
                         @Html.DisplayFor(modelItem => item.ValidityDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Client.FirstName) @Html.DisplayFor(modelItem => item.Client.LastName)
+                        <a asp-controller="Clients" asp-action="Details" asp-route-id="@item.Client.ClientId">
+                            @Html.DisplayFor(modelItem => item.Client.FirstName) @Html.DisplayFor(modelItem => item.Client.LastName)
+                        </a> 
                     </td>
                     <td>
                         @foreach (var advisor in item.AdvisorContracts)
                         {
-                            <span>@advisor.Advisor.FirstName&nbsp;@advisor.Advisor.LastName</span>
+                            <a asp-controller="Advisors" asp-action="Details" asp-route-id="@advisor.Advisor.AdvisorId">
+                                @advisor.Advisor.FirstName @advisor.Advisor.LastName
+                            </a> 
+                            
                         }
                     </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ContractId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ContractId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ContractId">Delete</a>
+                    <td class="text-center">
+                        <div class="btn-group">
+                            <form asp-action="Delete" asp-route-id="@item.ContractId" method="post">
+                                <span id="confirmDeleteSpan_@item.ContractId" style="display:none">
+                                    <span class="fw-bold">Opravdu odstranit?</span>
+                                    <button type="submit" class="btn btn-outline-danger">Ano</button>
+                                    <a href="#" class="btn btn-outline-primary mt-1 mt-sm-0" onclick="confirmDelete('@item.ContractId',false)">Ne</a>
+                                </span>
+
+                                <div class="btn-group" id="deleteSpan_@item.ContractId">
+                                    <a href="#" class="btn btn-outline-danger" onclick="confirmDelete('@item.ContractId',true)">Odstranit</a>
+                                    <a class="btn btn-outline-success" asp-action="Edit" asp-route-id="@item.ContractId">Upravit</a>
+                                    <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@item.ContractId">Detaily</a>
+                                </div>
+                            </form>   
+                        </div>
                     </td>
                 </tr>
 }
         </tbody>
     </table>
 </div>
+
+@section Scripts{
+    <script src="~/js/deleteConfirm.js"></script>
+}

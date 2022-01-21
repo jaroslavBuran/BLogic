@@ -1,36 +1,65 @@
 ﻿@model BLogic.Models.Contracts.Contract
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detail smlouvy";
 }
 
-<h1>Details</h1>
+<div class="row text-center">
+        <h1 class="mb-0">Detail smlouvy</h1>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-3 col-md-1">
+            <hr class="mb-md-4" />
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th scope="row">Evidenční číslo:</th>
+                        <td class="text-center fw-bold">@Html.DisplayFor(model =>model.EvidenceNumber)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Datum uzavření:</th>
+                        <td class="text-center">@Html.DisplayFor(model =>model.ClosureDate)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Datum platnosti:</th>
+                        <td class="text-center">@Html.DisplayFor(model => model.ValidityDate)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Email:</th>
+                        <td class="text-center">@Html.DisplayFor(model =>model.ContractId)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col text-center">
+            <form asp-action="Delete" asp-route-id="@Model.ContractId" method="post">
+                <span id="confirmDeleteSpan" style="display:none">
+                    <h4 class="fw-bold mt-1">Opravdu chcete odstranit tuto smlouvu?<br /></h4>
+                        <button type="submit" class="btn btn-outline-danger btn-lg">Ano</button>
+                    <a href="#" class="btn btn-outline-primary btn-lg" onclick="confirmSelfDelete(false)">Ne</a>
+                </span>
 
-<div>
-    <h4>Contract</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EvidenceNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EvidenceNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ClosureDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ClosureDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ValidityDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ValidityDate)
-        </dd>
-    </dl>
-</div>
+                <span id="deleteSpan">
+                    <a class="btn btn-outline-success btn-lg" asp-action="Edit" asp-route-id="@Model.ContractId">Upravit</a>
+                    <a href="#" class="btn btn-outline-danger btn-lg" onclick="confirmSelfDelete(true)">Odstranit</a>
+                    <a href="javascript: history.go(-1)" class="btn btn-outline-primary btn-lg">Zpět</a>
+                </span>
+            </form>
+        </div>
+    </div>
+
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ContractId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts{
+    <script src="~/js/deleteConfirm.js"></script>
+}

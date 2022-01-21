@@ -1,65 +1,81 @@
 ﻿@model IEnumerable<BLogic.Models.Clients.Client>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Seznam klientů";
 }
 
-<h1>Index</h1>
+<div class="row">
+    <div class="col text-center">
+        <h1 class="mb-0">Seznam klientů</h1>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-3 col-md-1">
+        <hr class="mb-md-4"/>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <a asp-action="Create" class="btn btn-outline-primary">Přidat klienta</a>
+    </div>
+</div>
+<div class="table-responsive-sm">
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Phone)
+                </th>
+                <th class="text-center">
+                    Počet smluv
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Phone)
+                    </td>
+                    <td class="text-center">
+                        @item.Contracts.Count
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group">
+                            <form asp-action="Delete" asp-route-id="@item.ClientId" method="post">
+                                <span id="confirmDeleteSpan_@item.ClientId" style="display:none">
+                                    <span class="fw-bold">Opravdu odstranit?</span>
+                                    <button type="submit" class="btn btn-outline-danger">Ano</button>
+                                    <a href="#" class="btn btn-outline-primary mt-1 mt-sm-0" onclick="confirmDelete('@item.ClientId',false)">Ne</a>
+                                </span>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BirthNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Age)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BirthNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Age)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ClientId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ClientId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ClientId">Delete</a>
-            </td>
-        </tr>
+                                <div class="btn-group" id="deleteSpan_@item.ClientId">
+                                    <a href="#" class="btn btn-outline-danger" onclick="confirmDelete('@item.ClientId',true)">Odstranit</a>
+                                    <a class="btn btn-outline-success" asp-action="Edit" asp-route-id="@item.ClientId">Upravit</a>
+                                    <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@item.ClientId">Detaily</a>
+                                </div>
+                            </form>   
+                        </div>
+                    </td>
+                </tr>
 }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script src="~/js/deleteConfirm.js"></script>
+}
