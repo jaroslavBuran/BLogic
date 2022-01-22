@@ -67,7 +67,7 @@ namespace BLogic.Controllers
             {
                 _context.Add(client);
                 contract.Client = client;
-                _context.Add(contract);
+                _context.Add(contract); //vyřešit pokud v db již poradce je!!!
                 _context.Add(advisor); //vyřešit přidání vícero poradců!!!!!
                 _context.Add(new AdvisorContract { Advisor = advisor, AdvisorId = advisor.AdvisorId, Contract = contract, ContractId = contract.ContractId });
                 await _context.SaveChangesAsync();
@@ -85,7 +85,9 @@ namespace BLogic.Controllers
                 return NotFound();
             }
 
-            var contract = await _context.Contract.FindAsync(id);
+            var contract = await _context.Contract.Where(c => c.ContractId == id).Include(cl => cl.Client).Include(ac => ac.AdvisorContracts).ThenInclude(a => a.Advisor).FirstOrDefaultAsync(m => m.ContractId == id);
+            
+   
             if (contract == null)
             {
                 return NotFound();
@@ -98,7 +100,10 @@ namespace BLogic.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ContractId,EvidenceNumber,ClosureDate,ValidityDate")] Contract contract)
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("ContractId,EvidenceNumber,ClosureDate,ValidityDate")] Contract contract,
+            [Bind("ClientId,FirstName,LastName,Email,Phone,BirthNumber,Age")] Client client)
         {
             if (id != contract.ContractId)
             {
@@ -108,7 +113,8 @@ namespace BLogic.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {
+                { // button na přidání poradce?
+                    contract.Client = client;
                     _context.Update(contract);
                     await _context.SaveChangesAsync();
                 }
@@ -160,6 +166,24 @@ namespace BLogic.Controllers
         private bool ContractExists(int id)
         {
             return _context.Contract.Any(e => e.ContractId == id);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAdvisor(int id, int ContractId)
+        {
+            var advisor = await _context.Advisor.FindAsync(id);
+            //tady je to potřeba dořešit nějaké try catch?
+            var contract = await _context.Contract.Where(c => c.ContractId == ContractId).Include(ac => ac.AdvisorContracts).ThenInclude(a => a.Advisor).FirstOrDefaultAsync(m => m.ContractId == ContractId);
+            foreach (var advor in contract.AdvisorContracts
+                .Where(a => a.ContractId == ContractId).Where(i => i.AdvisorId == id))
+            {
+                contract.AdvisorContracts.Remove(advor);
+            }
+            await _context.SaveChangesAsync();
+            
+
+            return RedirectToAction("Edit",new {id = ContractId});
         }
     }
 }

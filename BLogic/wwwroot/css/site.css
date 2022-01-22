@@ -1,27 +1,27 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+﻿#brand {
+    background-color: rgba(0,0,0,0) !important;
 }
 
-
+ul .active {
+    background-color: rgba(0,0,0,0.1) !important;
+    border-radius: .25em;
+}
 a {
-    text-decoration: none !important;
+    text-decoration: none;
+    border-radius: .25em;
+    color: #00409f;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.navbar a:hover {
+    background-color: rgba(0,0,0,0.1) !important;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+#logOut:hover {
+    background-color: rgba(0,0,0,0.1) !important;
+}
+
+.navbar {
+    background-color: rgba(0,0,0,0.09) !important;
 }
 
 /* Sticky footer styles
@@ -59,13 +59,14 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    background: linear-gradient(to right, #83a4d4, #b6fbff);
 }
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
 }

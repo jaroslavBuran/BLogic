@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BLogic.Data;
 using BLogic.Models.Advisors;
+using BLogic.Models;
 
 namespace BLogic.Controllers
 {
@@ -44,7 +45,7 @@ namespace BLogic.Controllers
         }
 
         // GET: Advisors/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
             return View();
         }
@@ -54,15 +55,17 @@ namespace BLogic.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AdvisorId,FirstName,LastName,Email,Phone,BirthNumber,Age")] Advisor advisor)
+        public async Task<IActionResult> Create(int? id, [Bind("AdvisorId,FirstName,LastName,Email,Phone,BirthNumber,Age")] Advisor advisor)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(advisor);
+                var contract = await _context.Contract.FindAsync(id);
+                _context.Add(new AdvisorContract { Advisor = advisor, AdvisorId = advisor.AdvisorId, Contract = contract, ContractId = contract.ContractId});
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(advisor);
+            return View(advisor); //vyřešit vrácení na smlouvy, pokude je poradce přidáván ze smlouvy
         }
 
         // GET: Advisors/Edit/5
