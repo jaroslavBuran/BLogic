@@ -26,5 +26,6 @@ namespace BLogic.Models.Advisors
 
         //M:N (poradce:smlouva)
         public ICollection<AdvisorContract> AdvisorContracts { get; set; }
+        public int? ContractId { get; set; }
     }
 }

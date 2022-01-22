@@ -94,55 +94,24 @@
             <h4>Správce smlouvy</h4>
         </div>
     </div>
-    @foreach (var advisor in Model.AdvisorContracts){
-        <a asp-controller="Advisors" asp-action="Details" asp-route-id="@advisor.Advisor.AdvisorId">@advisor.Advisor.FirstName @advisor.Advisor.LastName</a>
-    }
-    <!--
     <div class="row">
-        <div class="col-12 col-md-3">
-            <div class="form-group">
-                <label asp-for="Advisor.FirstName"></label>
-                <input asp-for="Advisor.FirstName" class="form-control" placeholder="Martin"/>
-                <span asp-validation-for="Advisor.FirstName" class="text-danger fw-bold"></span>
-            </div>
+        <div class="col">
+            @foreach (var advisor in Model.AdvisorContracts){
+                <a asp-controller="Advisors" asp-action="Details" asp-route-id="@advisor.Advisor.AdvisorId">@advisor.Advisor.FirstName @advisor.Advisor.LastName</a>
+            }
         </div>
-        <div class="col-12 col-md-3">
-            <div class="form-group">
-                <label asp-for="Advisor.LastName"></label>
-                <input asp-for="Advisor.LastName" class="form-control" placeholder="Novák"/>
-                <span asp-validation-for="Advisor.LastName" class="text-danger fw-bold"></span>
-            </div>
-        </div>
-        <div class="col-8 col-md-3">
-            <div class="form-group">
-                <label asp-for="Advisor.BirthNumber"></label>
-                <input asp-for="Advisor.BirthNumber" class="form-control" placeholder="1234567890"/>
-                <span asp-validation-for="Advisor.BirthNumber" class="text-danger fw-bold"></span>
-            </div>
-        </div>
-        <div class="col-4 col-md-3">
-            <div class="form-group">
-                <label asp-for="Advisor.Age"></label>
-                <input asp-for="Advisor.Age" class="form-control"/>
-                <span asp-validation-for="Advisor.Age" class="text-danger fw-bold"></span>
-            </div>
-        </div>
-        <div class="col-12 col-md-3">
-            <div class="form-group">
-                <label asp-for="Advisor.Email"></label>
-                <input asp-for="Advisor.Email" class="form-control" placeholder="jmeno@domena.cz"/>
-                <span asp-validation-for="Advisor.Email" class="text-danger fw-bold"></span>
-            </div>
-        </div>
-        <div class="col-12 col-md-3">
-            <div class="form-group">
-                <label asp-for="Advisor.Phone"></label>
-                <input asp-for="Advisor.Phone" class="form-control" placeholder="777000999"/>
-                <span asp-validation-for="Advisor.Phone" class="text-danger fw-bold"></span>
-            </div>
+        <hr class="my-4" />
+    </div>
+    <div class="row">
+        <div class="col mb-2">
+            <h4>Ostatní poradci</h4>
         </div>
     </div>
-    -->
+    <div class="row">
+        <div class="col">
+            <a asp-controller="Advisors" asp-action="Create" class="btn btn-outline-primary" asp-route-id="@Model.ContractId">Přidat dalšího</a>
+        </div>
+    </div>
     <div class="row mt-5 justify-content-center">
         <div class="col text-center">
             <button type="submit" class="btn btn-success btn-lg">Uložit</button>

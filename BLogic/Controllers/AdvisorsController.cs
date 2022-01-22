@@ -44,9 +44,9 @@ namespace BLogic.Controllers
         }
 
         // GET: Advisors/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
-            return View();
+            return View(id);
         }
 
         // POST: Advisors/Create
@@ -54,7 +54,7 @@ namespace BLogic.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AdvisorId,FirstName,LastName,Email,Phone,BirthNumber,Age")] Advisor advisor)
+        public async Task<IActionResult> Create(int? id, [Bind("AdvisorId,FirstName,LastName,Email,Phone,BirthNumber,Age")] Advisor advisor)
         {
             if (ModelState.IsValid)
             {
