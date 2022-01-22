@@ -96,9 +96,7 @@
     </div>
     <div class="row">
         <div class="col">
-            @foreach (var advisor in Model.AdvisorContracts){
-                <a asp-controller="Advisors" asp-action="Details" asp-route-id="@advisor.Advisor.AdvisorId">@advisor.Advisor.FirstName @advisor.Advisor.LastName</a>
-            }
+            <a asp-controller="Advisors" asp-action="Details" asp-route-id="@Model.AdvisorContracts.First().AdvisorId">@Model.AdvisorContracts.First().Advisor.FirstName @Model.AdvisorContracts.First().Advisor.LastName</a>
         </div>
         <hr class="my-4" />
     </div>
@@ -107,10 +105,26 @@
             <h4>Ostatní poradci</h4>
         </div>
     </div>
-    <div class="row">
+    <div class="row mb-4">
         <div class="col">
-            <a asp-controller="Advisors" asp-action="Create" class="btn btn-outline-primary" asp-route-id="@Model.ContractId">Přidat dalšího</a>
+            <!--NUTNO dořešit, aby se to vracelo zpět na edit obrzovku-->
+            <a asp-controller="Advisors" asp-action="Create" class="btn btn-primary" asp-route-id="@Model.ContractId"><i class="fas fa-plus"></i>&nbsp;Přidat dalšího</a>
         </div>
+    </div>
+    <div class="row justify-content-center justify-content-md-start">
+        @foreach (var advisor in Model.AdvisorContracts)
+            {
+                if (advisor != Model.AdvisorContracts.First())
+                {
+                    <div class="col-6 col-md-2 text-center text-md-start">
+                        <a asp-controller="Advisors" asp-action="Details" asp-route-id="@advisor.Advisor.AdvisorId">@advisor.Advisor.FirstName @advisor.Advisor.LastName</a>
+                        <button type="submit" asp-action="DeleteAdvisor" asp-route-id="@advisor.Advisor.AdvisorId" class="btn btn-sm btn-danger">
+                            <i class="far fa-trash-alt"></i>
+                            @Html.HiddenFor(model => model.ContractId)
+                            </button>
+                    </div>
+                }
+            } 
     </div>
     <div class="row mt-5 justify-content-center">
         <div class="col text-center">
@@ -119,10 +133,6 @@
         </div>
     </div>
 </form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

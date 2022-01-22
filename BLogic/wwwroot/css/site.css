@@ -1,9 +1,27 @@
-﻿a {
-    text-decoration: none !important;
+﻿#brand {
+    background-color: rgba(0,0,0,0) !important;
+}
+
+ul .active {
+    background-color: rgba(0,0,0,0.1) !important;
+    border-radius: .25em;
+}
+a {
+    text-decoration: none;
+    border-radius: .25em;
+    color: #00409f;
+}
+
+.navbar a:hover {
+    background-color: rgba(0,0,0,0.1) !important;
+}
+
+#logOut:hover {
+    background-color: rgba(0,0,0,0.1) !important;
 }
 
 .navbar {
-    background-color: #BBDEFB !important;
+    background-color: rgba(0,0,0,0.09) !important;
 }
 
 /* Sticky footer styles
@@ -43,6 +61,7 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
+    background: linear-gradient(to right, #83a4d4, #b6fbff);
 }
 .footer {
     position: absolute;

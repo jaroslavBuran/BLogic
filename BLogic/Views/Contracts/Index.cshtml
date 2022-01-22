@@ -16,7 +16,7 @@
 </div>
 <div class="row">
     <div class="col">
-        <a asp-action="Create" class="btn btn-outline-primary">Přidat smlouvu</a>
+        <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;Přidat smlouvu</a>
     </div>
 </div>
 <div class="table-responsive-sm">
@@ -59,27 +59,21 @@
                         </a> 
                     </td>
                     <td>
-                        @foreach (var advisor in item.AdvisorContracts)
-                        {
-                            <a asp-controller="Advisors" asp-action="Details" asp-route-id="@advisor.Advisor.AdvisorId">
-                                @advisor.Advisor.FirstName @advisor.Advisor.LastName
-                            </a> 
-                            
-                        }
+                        <a asp-controller="Advisors" asp-action="Details" asp-route-id="@item.AdvisorContracts.First().AdvisorId">@item.AdvisorContracts.First().Advisor.FirstName @item.AdvisorContracts.First().Advisor.LastName</a>
                     </td>
                     <td class="text-center">
                         <div class="btn-group">
                             <form asp-action="Delete" asp-route-id="@item.ContractId" method="post">
                                 <span id="confirmDeleteSpan_@item.ContractId" style="display:none">
                                     <span class="fw-bold">Opravdu odstranit?</span>
-                                    <button type="submit" class="btn btn-outline-danger">Ano</button>
-                                    <a href="#" class="btn btn-outline-primary mt-1 mt-sm-0" onclick="confirmDelete('@item.ContractId',false)">Ne</a>
+                                    <button type="submit" class="btn btn-danger">Ano</button>
+                                    <a href="#" class="btn btn-primary mt-1 mt-sm-0" onclick="confirmDelete('@item.ContractId',false)">Ne</a>
                                 </span>
 
                                 <div class="btn-group" id="deleteSpan_@item.ContractId">
-                                    <a href="#" class="btn btn-outline-danger" onclick="confirmDelete('@item.ContractId',true)">Odstranit</a>
-                                    <a class="btn btn-outline-success" asp-action="Edit" asp-route-id="@item.ContractId">Upravit</a>
-                                    <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@item.ContractId">Detaily</a>
+                                    <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.ContractId">Detaily</a>
+                                    <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.ContractId">Upravit</a>
+                                    <a href="#" class="btn btn-danger" onclick="confirmDelete('@item.ContractId',true)"><i class="far fa-trash-alt"></i></a>
                                 </div>
                             </form>   
                         </div>

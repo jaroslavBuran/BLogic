@@ -16,7 +16,7 @@
 </div>
 <div class="row">
     <div class="col">
-        <a asp-action="Create" class="btn btn-outline-primary">Přidat klienta</a>
+        <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;Přidat klienta</a>
     </div>
 </div>
 <div class="table-responsive-sm">
@@ -58,14 +58,14 @@
                             <form asp-action="Delete" asp-route-id="@item.ClientId" method="post">
                                 <span id="confirmDeleteSpan_@item.ClientId" style="display:none">
                                     <span class="fw-bold">Opravdu odstranit?</span>
-                                    <button type="submit" class="btn btn-outline-danger">Ano</button>
-                                    <a href="#" class="btn btn-outline-primary mt-1 mt-sm-0" onclick="confirmDelete('@item.ClientId',false)">Ne</a>
+                                    <button type="submit" class="btn btn-danger">Ano</button>
+                                    <a href="#" class="btn btn-primary mt-1 mt-sm-0" onclick="confirmDelete('@item.ClientId',false)">Ne</a>
                                 </span>
 
                                 <div class="btn-group" id="deleteSpan_@item.ClientId">
-                                    <a href="#" class="btn btn-outline-danger" onclick="confirmDelete('@item.ClientId',true)">Odstranit</a>
-                                    <a class="btn btn-outline-success" asp-action="Edit" asp-route-id="@item.ClientId">Upravit</a>
-                                    <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@item.ClientId">Detaily</a>
+                                    <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.ClientId">Detaily</a>
+                                    <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.ClientId">Upravit</a>
+                                    <a href="#" class="btn btn-danger" onclick="confirmDelete('@item.ClientId',true)"><i class="far fa-trash-alt"></i></a>
                                 </div>
                             </form>   
                         </div>

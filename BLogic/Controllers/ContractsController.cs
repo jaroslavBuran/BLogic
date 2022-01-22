@@ -167,5 +167,23 @@ namespace BLogic.Controllers
         {
             return _context.Contract.Any(e => e.ContractId == id);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAdvisor(int id, int ContractId)
+        {
+            var advisor = await _context.Advisor.FindAsync(id);
+            //tady je to potřeba dořešit nějaké try catch?
+            var contract = await _context.Contract.Where(c => c.ContractId == ContractId).Include(ac => ac.AdvisorContracts).ThenInclude(a => a.Advisor).FirstOrDefaultAsync(m => m.ContractId == ContractId);
+            foreach (var advor in contract.AdvisorContracts
+                .Where(a => a.ContractId == ContractId).Where(i => i.AdvisorId == id))
+            {
+                contract.AdvisorContracts.Remove(advor);
+            }
+            await _context.SaveChangesAsync();
+            
+
+            return RedirectToAction("Edit",new {id = ContractId});
+        }
     }
 }

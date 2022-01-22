@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BLogic.Data;
 using BLogic.Models.Advisors;
+using BLogic.Models;
 
 namespace BLogic.Controllers
 {
@@ -46,7 +47,7 @@ namespace BLogic.Controllers
         // GET: Advisors/Create
         public IActionResult Create(int? id)
         {
-            return View(id);
+            return View();
         }
 
         // POST: Advisors/Create
@@ -59,10 +60,12 @@ namespace BLogic.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(advisor);
+                var contract = await _context.Contract.FindAsync(id);
+                _context.Add(new AdvisorContract { Advisor = advisor, AdvisorId = advisor.AdvisorId, Contract = contract, ContractId = contract.ContractId});
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(advisor);
+            return View(advisor); //vyřešit vrácení na smlouvy, pokude je poradce přidáván ze smlouvy
         }
 
         // GET: Advisors/Edit/5
