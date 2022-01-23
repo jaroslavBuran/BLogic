@@ -38,6 +38,9 @@ namespace BLogic.Controllers
             }
 
             var contract = await _context.Contract
+                .Include(c => c.Client)
+                .Include(ac => ac.AdvisorContracts)
+                .ThenInclude(a => a.Advisor)
                 .FirstOrDefaultAsync(m => m.ContractId == id);
             if (contract == null)
             {
