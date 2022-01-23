@@ -1,54 +1,63 @@
 ﻿@model BLogic.Models.Clients.Client
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detail klienta";
 }
 
-<h1>Details</h1>
+<div class="row">
+    <div class="col text-center">
+        <h1 class="mb-0">Detail klienta</h1>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-3 col-md-1">
+        <hr class="mb-md-4"/>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-12 col-md-3">
+            <div class="row text-center">
+                <div class="col-12 fw-bold">
+                    @Html.DisplayFor(model => model.FirstName)
+                    @Html.DisplayFor(model => model.LastName)
+                </div>
+                <div class="col-12">
+                    @Html.DisplayNameFor(model => model.BirthNumber):
+                    @Html.DisplayFor(model => model.BirthNumber)
+                </div>
+                <div class="col-12">
+                    @Html.DisplayNameFor(model => model.Age):
+                    @Html.DisplayFor(model => model.Age)
+                </div>
+                <div class="col-12">
+                    @Html.DisplayNameFor(model => model.Email):
+                    <a href="mailto:@Html.DisplayFor(model => model.Email)">@Html.DisplayFor(model => model.Email)</a>
+                </div>
+                <div class="col-12">
+                    @Html.DisplayNameFor(model => model.Phone):
+                    @Html.DisplayFor(model => model.Phone)
+                </div>
+            </div> 
+        </div>
+</div>
+<div class="row justify-content-center mt-4">
+    <div class="col text-center">
+        <form asp-action="Delete" asp-route-id="@Model.ClientId" method="post">
+            <span id="confirmDeleteSpan" style="display:none">
+                <h5 class="fw-bold mt-1">Opravdu chcete odstranit tohoto klienta?<br /></h5>
+                    <button type="submit" class="btn btn-danger">Ano</button>
+                <a href="#" class="btn btn-primary" onclick="confirmSelfDelete(false)">Ne</a>
+            </span>
 
-<div>
-    <h4>Client</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BirthNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BirthNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Age)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Age)
-        </dd>
-    </dl>
+            <span id="deleteSpan">
+                <a class="btn btn-success" asp-action="Edit" asp-route-id="@Model.ClientId">Upravit</a>
+                <a href="#" class="btn btn-danger" onclick="confirmSelfDelete(true)"><i class="far fa-trash-alt"></i></a>
+                <a href="javascript: window.history.back()" class="btn btn-primary">Zpět</a>
+            </span>
+        </form>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ClientId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+@section Scripts{
+    <script src="~/js/deleteConfirm.js"></script>
+}

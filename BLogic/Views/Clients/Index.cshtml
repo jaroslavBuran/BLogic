@@ -57,8 +57,8 @@
                         <div class="btn-group">
                             <form asp-action="Delete" asp-route-id="@item.ClientId" method="post">
                                 <span id="confirmDeleteSpan_@item.ClientId" style="display:none">
-                                    <span class="fw-bold">Opravdu odstranit?</span>
-                                    <button type="submit" class="btn btn-danger">Ano</button>
+                                    <div class="fw-bold">Opravdu odstranit?</div>
+                                    <button type="submit" class="btn btn-danger mt-1 mt-sm-0">Ano</button>
                                     <a href="#" class="btn btn-primary mt-1 mt-sm-0" onclick="confirmDelete('@item.ClientId',false)">Ne</a>
                                 </span>
 

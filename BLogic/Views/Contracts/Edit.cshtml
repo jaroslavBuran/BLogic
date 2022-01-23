@@ -116,7 +116,7 @@
             {
                 if (advisor != Model.AdvisorContracts.First())
                 {
-                    <div class="col-6 col-md-2 text-center text-md-start">
+                    <div class="col-6 col-md-2 text-center text-md-start mt-3 mt-md-0">
                         <a asp-controller="Advisors" asp-action="Details" asp-route-id="@advisor.Advisor.AdvisorId">@advisor.Advisor.FirstName @advisor.Advisor.LastName</a>
                         <button type="submit" asp-action="DeleteAdvisor" asp-route-id="@advisor.Advisor.AdvisorId" class="btn btn-sm btn-danger">
                             <i class="far fa-trash-alt"></i>
@@ -129,7 +129,7 @@
     <div class="row mt-5 justify-content-center">
         <div class="col text-center">
             <button type="submit" class="btn btn-success btn-lg">Uložit</button>
-            <a asp-action="Index" class="btn btn-danger btn-lg">Zrušit</a>
+            <a href="javascript: window.history.back()" class="btn btn-danger btn-lg">Zrušit</a>
         </div>
     </div>
 </form>
