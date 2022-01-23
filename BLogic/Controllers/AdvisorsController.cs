@@ -23,7 +23,7 @@ namespace BLogic.Controllers
         // GET: Advisors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Advisor.ToListAsync());
+            return View(await _context.Advisor.Include(ac => ac.AdvisorContracts).ThenInclude(a => a.Contract).ThenInclude(c => c.Client).ToListAsync());
         }
 
         // GET: Advisors/Details/5

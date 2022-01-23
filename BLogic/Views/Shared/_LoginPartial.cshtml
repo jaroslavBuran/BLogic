@@ -5,8 +5,14 @@
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a  class="nav-link text-dark fw-bold" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Můj účet</a>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Správa účtu
+        </a>
+        <ul class="dropdown-menu fw-bold" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item fw-bold" asp-controller="Home" asp-action="ChangePassword">Změna hesla</a></li>
+            <li><a class="dropdown-item fw-bold" asp-controller="Home" asp-action="ChangeEmail">Změna emailu</a></li>
+        </ul>
     </li>
     <li class="nav-item">
         <form  class="form-inline" asp-controller="Home" asp-action="Logout">
