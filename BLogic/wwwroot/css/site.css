@@ -24,6 +24,15 @@ a {
     background-color: rgba(0,0,0,0.09) !important;
 }
 
+#detail {
+    background-color: rgba(0,0,0,0.1);
+    width: max-content;
+}
+
+#contractHead {
+    font-size: 1.2em;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {

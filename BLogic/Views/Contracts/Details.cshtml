@@ -4,7 +4,8 @@
     ViewData["Title"] = "Detail smlouvy";
 }
 
-<div class="row text-center">
+<div id="detail" class="container rounded p-3">
+    <div class="row text-center">
         <h1 class="mb-0">Detail smlouvy</h1>
     </div>
     <div class="row justify-content-center">
@@ -12,28 +13,130 @@
             <hr class="mb-md-4" />
         </div>
     </div>
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-8">
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <th scope="row">Evidenční číslo:</th>
-                        <td class="text-center fw-bold">@Html.DisplayFor(model =>model.EvidenceNumber)</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Datum uzavření:</th>
-                        <td class="text-center">@Html.DisplayFor(model =>model.ClosureDate)</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Datum platnosti:</th>
-                        <td class="text-center">@Html.DisplayFor(model => model.ValidityDate)</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Email:</th>
-                        <td class="text-center">@Html.DisplayFor(model =>model.ContractId)</td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="row justify-content-center mb-4" id="contractHead">
+        <div class="col-auto fw-bold">
+            @Html.DisplayNameFor(model => model.EvidenceNumber):
+        </div>
+        <div class="col-auto">
+            @Html.DisplayFor(model => model.EvidenceNumber)
+        </div>
+        <div class="col-auto fw-bold">
+            @Html.DisplayNameFor(model => model.ClosureDate):
+        </div>
+        <div class="col-auto">
+            @Html.DisplayFor(model => model.ClosureDate)
+        </div>
+        <div class="col-auto fw-bold">
+            @Html.DisplayNameFor(model => model.ValidityDate):
+        </div>
+        <div class="col-auto">
+            @Html.DisplayFor(model => model.ValidityDate)
+        </div>
+    </div>
+    <div class="row justify-content-center mb-5">
+        <div class="col-3">
+            <div class="row text-center">
+                <div class="col-12">
+                    <h5 class="text-decoration-underline">Klient</h5>
+                </div>
+                <div class="col-12 fw-bold">
+                    @Html.DisplayFor(model => model.Client.FirstName)
+                    @Html.DisplayFor(model => model.Client.LastName)
+                </div>
+                <div class="col-12">
+                    @Html.DisplayNameFor(model => model.Client.BirthNumber):
+                    @Html.DisplayFor(model => model.Client.BirthNumber)
+                </div>
+                <div class="col-12">
+                    @Html.DisplayNameFor(model => model.Client.Age):
+                    @Html.DisplayFor(model => model.Client.Age)
+                </div>
+                <div class="col-12">
+                    @Html.DisplayNameFor(model => model.Client.Email):
+                    <a href="mailto:@Html.DisplayFor(model => model.Client.Email)">@Html.DisplayFor(model => model.Client.Email)</a>
+                </div>
+                <div class="col-12">
+                    @Html.DisplayNameFor(model => model.Client.Phone):
+                    @Html.DisplayFor(model => model.Client.Phone)
+                </div>
+            </div> 
+        </div>
+        <div class="col-3">
+            <div class="row text-center">
+                <div class="col-12">
+                    <h5 class="text-decoration-underline">Správce smlouvy</h5>
+                </div>
+                <div class="col-12 fw-bold">
+                    @Html.DisplayFor(model => model.AdvisorContracts.First().Advisor.FirstName)
+                    @Html.DisplayFor(model => model.AdvisorContracts.First().Advisor.LastName)
+                </div>
+                <div class="col-12">
+                    @Html.DisplayNameFor(model => model.AdvisorContracts.First().Advisor.BirthNumber):
+                    @Html.DisplayFor(model => model.AdvisorContracts.First().Advisor.BirthNumber)
+                </div>
+                <div class="col-12">
+                    @Html.DisplayNameFor(model => model.AdvisorContracts.First().Advisor.Age):
+                    @Html.DisplayFor(model => model.AdvisorContracts.First().Advisor.Age)
+                </div>
+                <div class="col-12">
+                    @Html.DisplayNameFor(model => model.AdvisorContracts.First().Advisor.Email):
+                    <a href="mailto:@Html.DisplayFor(model => model.AdvisorContracts.First().Advisor.Email)">@Html.DisplayFor(model => model.AdvisorContracts.First().Advisor.Email)</a>
+                </div>
+                <div class="col-12">
+                    @Html.DisplayNameFor(model => model.AdvisorContracts.First().Advisor.Phone):
+                    @Html.DisplayFor(model => model.AdvisorContracts.First().Advisor.Phone)
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h5 class="text-decoration-underline">Další poradci</h5>
+                </div>
+            </div>
+            <div class="row h-75">
+                    @foreach (var advisor in Model.AdvisorContracts)
+                    {
+                        if (Model.AdvisorContracts.Count < 2)
+                        {
+                            <div class="col-12">
+                                <div class="row h-100 align-items-center text-center">
+                                    <h4>Žádní další poradci.</h4>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            if (advisor != Model.AdvisorContracts.First())
+                            {
+                                <div class="col-6 mb-3">
+                                    <div class="row text-center">
+                                        <div class="col-12 fw-bold">
+                                            @advisor.Advisor.FirstName
+                                            @advisor.Advisor.LastName                              
+                                        </div>
+                                        <div class="col-12">
+                                            Rodné číslo:
+                                            @advisor.Advisor.BirthNumber
+                                        </div>
+                                        <div class="col-12">
+                                            Věk:
+                                            @advisor.Advisor.Age                               
+                                        </div>
+                                        <div class="col-12">
+                                            Email:
+                                            <a href="mailto:@advisor.Advisor.Email">@advisor.Advisor.Email</a>
+                                        </div>
+                                        <div class="col-12">
+                                            Telefon:
+                                            @advisor.Advisor.Phone
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+            </div>
         </div>
     </div>
     <div class="row justify-content-center">
@@ -47,12 +150,13 @@
 
                 <span id="deleteSpan">
                     <a class="btn btn-success btn-lg" asp-action="Edit" asp-route-id="@Model.ContractId">Upravit</a>
-                    <a href="#" class="btn btn-danger btn-lg" onclick="confirmSelfDelete(true)">Odstranit</a>
+                    <a href="#" class="btn btn-danger btn-lg" onclick="confirmSelfDelete(true)"><i class="far fa-trash-alt"></i></a>
                     <a href="javascript: history.go(-1)" class="btn btn-primary btn-lg">Zpět</a>
                 </span>
             </form>
         </div>
     </div>
+</div>
 
 @section Scripts{
     <script src="~/js/deleteConfirm.js"></script>
