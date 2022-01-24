@@ -23,7 +23,11 @@ namespace BLogic.Controllers
         // GET: Advisors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Advisor.Include(ac => ac.AdvisorContracts).ThenInclude(a => a.Contract).ThenInclude(c => c.Client).ToListAsync());
+            return View(await _context.Advisor
+                .Include(ac => ac.AdvisorContracts)
+                .ThenInclude(a => a.Contract)
+                .ThenInclude(c => c.Client)
+                .ToListAsync());
         }
 
         // GET: Advisors/Details/5
@@ -35,6 +39,9 @@ namespace BLogic.Controllers
             }
 
             var advisor = await _context.Advisor
+                .Include(ac => ac.AdvisorContracts)
+                .ThenInclude(a => a.Contract)
+                .ThenInclude(c => c.Client)
                 .FirstOrDefaultAsync(m => m.AdvisorId == id);
             if (advisor == null)
             {
@@ -45,8 +52,9 @@ namespace BLogic.Controllers
         }
 
         // GET: Advisors/Create
-        public IActionResult Create(int? id)
+        public IActionResult Create(int? id, string returnUrl = null)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -55,17 +63,46 @@ namespace BLogic.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int? id, [Bind("AdvisorId,FirstName,LastName,Email,Phone,BirthNumber,Age")] Advisor advisor)
+        public async Task<IActionResult> Create(int? id, [Bind("AdvisorId,FirstName,LastName,Email,Phone,BirthNumber,Age")] Advisor advisor, string returnUrl = null)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(advisor);
-                var contract = await _context.Contract.FindAsync(id);
-                _context.Add(new AdvisorContract { Advisor = advisor, AdvisorId = advisor.AdvisorId, Contract = contract, ContractId = contract.ContractId});
+                bool isAdvisor = _context.Advisor.Any(bn => bn.BirthNumber == advisor.BirthNumber);
+
+                if (isAdvisor)
+                {
+                    //zde je třeba hláška, že už existuje
+                    advisor = _context.Advisor.Where(bn => bn.BirthNumber == advisor.BirthNumber).First();
+                }
+                else
+                {
+                    _context.Add(advisor);
+                }
+
+                if (returnUrl != null)
+                {
+                    var contract = await _context.Contract
+                        .Where(i => i.ContractId == id)
+                        .Include(ac => ac.AdvisorContracts)
+                        .FirstOrDefaultAsync();
+
+                    if (contract.AdvisorContracts.Any(a => a.AdvisorId == advisor.AdvisorId))
+                    {
+                        //zde třeba hlášku, že advisor je již included
+                        return Redirect(returnUrl);
+                    }
+                    else
+                    {
+                        _context.Add(new AdvisorContract { Advisor = advisor, AdvisorId = advisor.AdvisorId, Contract = contract, ContractId = contract.ContractId });
+                        await _context.SaveChangesAsync();
+                        return Redirect(returnUrl);
+                    } 
+                }
+
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
-            return View(advisor); //vyřešit vrácení na smlouvy, pokude je poradce přidáván ze smlouvy
+            return View(advisor);
         }
 
         // GET: Advisors/Edit/5

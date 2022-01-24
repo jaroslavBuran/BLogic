@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col text-center">
-        <h1 class="mb-0">Detail klienta</h1>
+        <h1 class="mb-0">Detail poradce</h1>
     </div>
 </div>
 <div class="row justify-content-center">
@@ -56,6 +56,72 @@
             </span>
         </form>
     </div>
+</div>
+<div class="row justify-content-center mt-5">
+    <div class="col-12 text-center">
+        <h2>Platné smlouvy</h2>
+    </div>
+    @if (Model.AdvisorContracts.Count > 0)
+    {
+        <div class="table-responsive-sm">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AdvisorContracts.First().Contract.EvidenceNumber)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AdvisorContracts.First().Contract.ClosureDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AdvisorContracts.First().Contract.ValidityDate)
+                        </th>
+                        <th>
+                            Klient
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.AdvisorContracts) {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Contract.EvidenceNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Contract.ClosureDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Contract.ValidityDate)
+                            </td>
+                            <td>
+                                <a asp-controller="Clients" asp-action="Details" asp-route-id="@item.Contract.Client.ClientId">
+                                    @Html.DisplayFor(modelItem => item.Contract.Client.FirstName) @Html.DisplayFor(modelItem => item.Contract.Client.LastName)
+                                </a> 
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <form asp-controller="Contracts" asp-action="Delete" asp-route-id="@item.ContractId" method="post">
+                                        <span id="confirmDeleteSpan_@item.ContractId" style="display:none">
+                                            <div class="fw-bold">Opravdu odstranit?</div>
+                                            <button type="submit" class="btn btn-danger mt-1 mt-sm-0">Ano</button>
+                                            <a href="#" class="btn btn-primary mt-1 mt-sm-0" onclick="confirmDelete('@item.ContractId',false)">Ne</a>
+                                        </span>
+
+                                        <div class="btn-group" id="deleteSpan_@item.ContractId">
+                                            <a class="btn btn-primary" asp-controller="Contracts" asp-action="Details" asp-route-id="@item.ContractId">Detaily</a>
+                                            <a class="btn btn-success" asp-controller="Contracts" asp-action="Edit" asp-route-id="@item.ContractId">Upravit</a>
+                                            <a href="#" class="btn btn-danger" onclick="confirmDelete('@item.ContractId',true)"><i class="far fa-trash-alt"></i></a>
+                                        </div>
+                                    </form>   
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>
 
 @section Scripts{

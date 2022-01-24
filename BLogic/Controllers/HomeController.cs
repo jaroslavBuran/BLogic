@@ -88,22 +88,32 @@ namespace BLogic.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = model.Email, Email = model.Email};
-                var result = await userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToLocal(returnUrl);
-                }
+                var isEmail = context.Users.Any(e => e.UserName == model.Email);
 
-                foreach (var error in result.Errors)
+                if (isEmail)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    //zde musí být hláška, že již existuje
+                    return View(model);
+                }
+                else
+                {
+                    var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                    var result = await userManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        await signInManager.SignInAsync(user, isPersistent: false);
+                        return RedirectToLocal(returnUrl);
+                    }
+
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
                 }
             }
 
@@ -174,29 +184,39 @@ namespace BLogic.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeEmail(ChangeEmailViewModel model)
         {
-            var user = await userManager.GetUserAsync(HttpContext.User);
-            if (user == null)
+            var isEmail = context.Users.Any(e => e.UserName == model.NewEmail);
+
+            if (isEmail)
             {
-                return NotFound();
+                //zde je třeba hláška, že už se používá
+                return View(model);
             }
             else
             {
-                user.Email = model.NewEmail;
-
-                var result = await userManager.UpdateAsync(user);
-
-                if (result.Succeeded)
+                var user = await userManager.GetUserAsync(HttpContext.User);
+                if (user == null)
                 {
-                    return RedirectToAction("Index");
+                    return NotFound();
                 }
-
-                foreach (var error in result.Errors)
+                else
                 {
-                    ModelState.AddModelError("", error.Description);
-                }
+                    user.Email = model.NewEmail;
 
-                return View(model);
+                    var result = await userManager.UpdateAsync(user);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index");
+                    }
+
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+
+                    return View(model);
+                }
             }
-        }
+        }    
     }
 }
