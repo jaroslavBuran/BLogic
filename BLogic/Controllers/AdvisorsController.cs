@@ -21,13 +21,33 @@ namespace BLogic.Controllers
         }
 
         // GET: Advisors
-        public async Task<IActionResult> Index()
+        public IActionResult Index(string selectedStatus = "")
         {
-            return View(await _context.Advisor
+            var vm = new FilterViewModel();
+
+            var list = new List<SelectListItem>();
+
+            var data = _context.Advisor
                 .Include(ac => ac.AdvisorContracts)
                 .ThenInclude(a => a.Contract)
                 .ThenInclude(c => c.Client)
-                .ToListAsync());
+                .AsQueryable();
+
+            foreach (Advisor advisor in data)
+            {
+                list.Add(new SelectListItem { Value = advisor.BirthNumber, Text = $"{advisor.FirstName} {advisor.LastName}" });
+            }
+
+            vm.Statuses = list;
+
+            if (!String.IsNullOrEmpty(selectedStatus))
+            {
+                data = data.Where(c => c.BirthNumber == selectedStatus);
+            }
+
+            vm.DataAdvisor = data.ToList();
+
+            return View(vm);
         }
 
         // GET: Advisors/Details/5
@@ -71,12 +91,15 @@ namespace BLogic.Controllers
 
                 if (isAdvisor)
                 {
-                    //zde je třeba hláška, že už existuje
+                    TempData["Message"] = "Poradce již existuje!";
                     advisor = _context.Advisor.Where(bn => bn.BirthNumber == advisor.BirthNumber).First();
+                    return View(advisor);
                 }
                 else
                 {
                     _context.Add(advisor);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
                 }
 
                 if (returnUrl != null)
@@ -88,7 +111,7 @@ namespace BLogic.Controllers
 
                     if (contract.AdvisorContracts.Any(a => a.AdvisorId == advisor.AdvisorId))
                     {
-                        //zde třeba hlášku, že advisor je již included
+                        TempData["Message"] = "Poradce je již u smlouvy evidován!";
                         return Redirect(returnUrl);
                     }
                     else
@@ -98,9 +121,6 @@ namespace BLogic.Controllers
                         return Redirect(returnUrl);
                     } 
                 }
-
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
             }
             return View(advisor);
         }

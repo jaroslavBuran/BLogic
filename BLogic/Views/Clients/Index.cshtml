@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BLogic.Models.Clients.Client>
+﻿@model FilterViewModel
 
 @{
     ViewData["Title"] = "Seznam klientů";
@@ -18,22 +18,41 @@
     <div class="col">
         <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;Přidat klienta</a>
     </div>
+    <div class="col text-end">
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                Filtry
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li>
+                    <div class="dropdown-item rounded">
+                        @using(Html.BeginForm("Index","Clients",FormMethod.Get))
+                        {
+                            <label class="fw-bold">Výpis podle jména klienta</label> //nedává moc smysl, každý klient je v seznamu jen jednou, stejně tak poradce
+                            @Html.DropDownListFor(f=>f.SelectedStatus,Model.Statuses,"Vyberte")//lépe asi podle počtu smluv?
+                            <input type="submit" value="Filtrovat" class="btn btn-primary" />
+                        }
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 <div class="table-responsive-sm">
     <table class="table table-striped align-middle">
         <thead>
             <tr>
                 <th class="fw-bold">
-                    @Html.DisplayNameFor(model => model.BirthNumber)
+                    @Html.DisplayNameFor(model => model.DataClient.First().BirthNumber)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FirstName)
+                    @Html.DisplayNameFor(model => model.DataClient.First().FirstName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Email)
+                    @Html.DisplayNameFor(model => model.DataClient.First().Email)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Phone)
+                    @Html.DisplayNameFor(model => model.DataClient.First().Phone)
                 </th>
                 <th class="text-center">
                     Počet smluv
@@ -42,7 +61,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model) {
+            @foreach (var item in Model.DataClient) {
                 <tr>
                     <td class="fw-bold">
                         @Html.DisplayFor(modelItem => item.BirthNumber)

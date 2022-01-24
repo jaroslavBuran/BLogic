@@ -41,6 +41,14 @@ a {
     }
 }
 
+.dropdown-menu {
+    background: linear-gradient(to right, #83a4d4, #b6fbff) !important;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(0,0,0,0.1) !important;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
