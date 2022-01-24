@@ -26,7 +26,11 @@ namespace BLogic.Controllers
         // GET: Contracts
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Contract.Include(c => c.Client).Include(ac => ac.AdvisorContracts).ThenInclude(a => a.Advisor).ToListAsync());
+            return View(await _context.Contract
+                .Include(c => c.Client)
+                .Include(ac => ac.AdvisorContracts)
+                .ThenInclude(a => a.Advisor)
+                .ToListAsync());
         }
 
         // GET: Contracts/Details/5
@@ -68,11 +72,33 @@ namespace BLogic.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(client);
+                //hledám, zda se klient a/nebo poradce již nachází v db
+                bool isClient = _context.Client.Any(bn => bn.BirthNumber == client.BirthNumber);
+                bool isAdvisor = _context.Advisor.Any(bn => bn.BirthNumber == advisor.BirthNumber);
+
+                if (isClient)
+                {
+                    client = _context.Client.Where(bn => bn.BirthNumber == client.BirthNumber).First();
+                }
+                else
+                {
+                    _context.Add(client);
+                }
+
+                if (isAdvisor)
+                {
+                    advisor = _context.Advisor.Where(bn => bn.BirthNumber == advisor.BirthNumber).First();
+                }
+                else
+                {
+                    _context.Add(advisor);
+                }
+
+
                 contract.Client = client;
-                _context.Add(contract); //vyřešit pokud v db již poradce je!!!
-                _context.Add(advisor); //vyřešit přidání vícero poradců!!!!!
+                _context.Add(contract);
                 _context.Add(new AdvisorContract { Advisor = advisor, AdvisorId = advisor.AdvisorId, Contract = contract, ContractId = contract.ContractId });
+
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));

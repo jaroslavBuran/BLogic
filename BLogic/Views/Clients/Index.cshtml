@@ -23,6 +23,9 @@
     <table class="table table-striped align-middle">
         <thead>
             <tr>
+                <th class="fw-bold">
+                    @Html.DisplayNameFor(model => model.BirthNumber)
+                </th>
                 <th>
                     @Html.DisplayNameFor(model => model.FirstName)
                 </th>
@@ -41,6 +44,9 @@
         <tbody>
             @foreach (var item in Model) {
                 <tr>
+                    <td class="fw-bold">
+                        @Html.DisplayFor(modelItem => item.BirthNumber)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)
                     </td>

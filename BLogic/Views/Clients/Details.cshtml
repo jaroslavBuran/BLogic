@@ -57,6 +57,71 @@
         </form>
     </div>
 </div>
+<div class="row justify-content-center mt-5">
+    <div class="col-12 text-center">
+        <h2>Platné smlouvy</h2>
+    </div>
+    @if (Model.Contracts.Count > 0)
+    {
+        <div class="table-responsive-sm">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Contracts.First().EvidenceNumber)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Contracts.First().ClosureDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Contracts.First().ValidityDate)
+                        </th>
+                        <th>
+                            Správce smlouvy
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Contracts) {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EvidenceNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ClosureDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ValidityDate)
+                            </td>
+                            <td>
+                                <a asp-controller="Advisors" asp-action="Details" asp-route-id="@item.AdvisorContracts.First().AdvisorId">@item.AdvisorContracts.First().Advisor.FirstName @item.AdvisorContracts.First().Advisor.LastName</a>
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <form asp-controller="Contracts" asp-action="Delete" asp-route-id="@item.ContractId" method="post">
+                                        <span id="confirmDeleteSpan_@item.ContractId" style="display:none">
+                                            <div class="fw-bold">Opravdu odstranit?</div>
+                                            <button type="submit" class="btn btn-danger mt-1 mt-sm-0">Ano</button>
+                                            <a href="#" class="btn btn-primary mt-1 mt-sm-0" onclick="confirmDelete('@item.ContractId',false)">Ne</a>
+                                        </span>
+
+                                        <div class="btn-group" id="deleteSpan_@item.ContractId">
+                                            <a class="btn btn-primary" asp-controller="Contracts" asp-action="Details" asp-route-id="@item.ContractId">Detaily</a>
+                                            <a class="btn btn-success" asp-controller="Contracts" asp-action="Edit" asp-route-id="@item.ContractId">Upravit</a>
+                                            <a href="#" class="btn btn-danger" onclick="confirmDelete('@item.ContractId',true)"><i class="far fa-trash-alt"></i></a>
+                                        </div>
+                                    </form>   
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
 
 @section Scripts{
     <script src="~/js/deleteConfirm.js"></script>

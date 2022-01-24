@@ -34,6 +34,9 @@ namespace BLogic.Controllers
             }
 
             var client = await _context.Client
+                .Include(c => c.Contracts)
+                .ThenInclude(ac => ac.AdvisorContracts)
+                .ThenInclude(a => a.Advisor)
                 .FirstOrDefaultAsync(m => m.ClientId == id);
             if (client == null)
             {
@@ -58,8 +61,19 @@ namespace BLogic.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(client);
-                await _context.SaveChangesAsync();
+                bool isClient = _context.Client.Any(bn => bn.BirthNumber == client.BirthNumber);
+
+                if (isClient)
+                {
+                    //zde je třeba hláška, že už existuje
+                    client = _context.Client.Where(bn => bn.BirthNumber == client.BirthNumber).First();
+                }
+                else
+                {
+                    _context.Add(client);
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             return View(client);

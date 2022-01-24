@@ -108,7 +108,7 @@
     <div class="row mb-4">
         <div class="col">
             <!--NUTNO dořešit, aby se to vracelo zpět na edit obrzovku-->
-            <a asp-controller="Advisors" asp-action="Create" class="btn btn-primary" asp-route-id="@Model.ContractId"><i class="fas fa-plus"></i>&nbsp;Přidat dalšího</a>
+            <a asp-controller="Advisors" asp-action="Create" class="btn btn-primary" asp-route-id="@Model.ContractId" asp-route-returnurl="@Context.Request.Path.Value.ToString()"><i class="fas fa-plus"></i>&nbsp;Přidat dalšího</a>
         </div>
     </div>
     <div class="row justify-content-center justify-content-md-start">

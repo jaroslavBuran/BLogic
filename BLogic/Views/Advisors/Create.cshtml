@@ -4,7 +4,7 @@
     ViewData["Title"] = "Přidat poradce";
 }
 
-<form method="post">
+<form method="post" asp-route-returnurl="@ViewBag.ReturnUrl">
     <div class="row text-center"> 
         <h1 class="mb-0">Nový poradce</h1>
     </div>
@@ -40,7 +40,7 @@
         <div class="col-3 col-md-1">
             <div class="form-group mb-2 mb-md-0">
                 <label asp-for="Age" class="control-label"></label>
-                <input asp-for="Age" class="form-control"/>
+                <input asp-for="Age" class="form-control" min="1"/>
                 <span asp-validation-for="Age" class="text-danger fw-bold"></span>
             </div>
         </div>
