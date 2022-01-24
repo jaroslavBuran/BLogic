@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BLogic.Data;
 using BLogic.Models.Clients;
+using BLogic.Models;
 
 namespace BLogic.Controllers
 {
@@ -20,9 +21,31 @@ namespace BLogic.Controllers
         }
 
         // GET: Clients
-        public async Task<IActionResult> Index()
+        public IActionResult Index(string selectedStatus = "")
         {
-            return View(await _context.Client.Include(c => c.Contracts).ToListAsync());
+            var vm = new FilterViewModel();
+
+            var list = new List<SelectListItem>();
+
+            var data = _context.Client
+                .Include(c => c.Contracts)
+                .AsQueryable();
+
+            foreach (Client client in data)
+            {
+                list.Add(new SelectListItem { Value = client.BirthNumber, Text = $"{client.FirstName} {client.LastName}" });
+            }
+
+            vm.Statuses = list;
+
+            if (!String.IsNullOrEmpty(selectedStatus))
+            {
+                data = data.Where(c => c.BirthNumber == selectedStatus);
+            }
+
+            vm.DataClient = data.ToList();
+
+            return View(vm);
         }
 
         // GET: Clients/Details/5
@@ -65,16 +88,16 @@ namespace BLogic.Controllers
 
                 if (isClient)
                 {
-                    //zde je třeba hláška, že už existuje
+                    TempData["Message"] = "Klient již existuje!";
                     client = _context.Client.Where(bn => bn.BirthNumber == client.BirthNumber).First();
+                    return View(client);
                 }
                 else
                 {
                     _context.Add(client);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-
-                return RedirectToAction(nameof(Index));
             }
             return View(client);
         }

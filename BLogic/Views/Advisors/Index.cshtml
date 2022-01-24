@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BLogic.Models.Advisors.Advisor>
+﻿@model FilterViewModel
 
 @{
     ViewData["Title"] = "Seznam poradců";
@@ -18,22 +18,41 @@
     <div class="col">
         <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;Přidat poradce</a>
     </div>
+    <div class="col text-end">
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                Filtry
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li>
+                    <div class="dropdown-item rounded">
+                        @using(Html.BeginForm("Index","Advisors",FormMethod.Get))
+                        {
+                            <label class="fw-bold">Výpis podle jména poradce</label>
+                            @Html.DropDownListFor(f=>f.SelectedStatus,Model.Statuses,"Vyberte")
+                            <input type="submit" value="Filtrovat" class="btn btn-primary" />
+                        }
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 <div class="table-responsive-sm">
     <table class="table table-striped align-middle">
         <thead>
             <tr>
                 <th class="fw-bold">
-                    @Html.DisplayNameFor(model => model.BirthNumber)
+                    @Html.DisplayNameFor(model => model.DataAdvisor.First().BirthNumber)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FirstName)
+                    @Html.DisplayNameFor(model => model.DataAdvisor.First().FirstName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Email)
+                    @Html.DisplayNameFor(model => model.DataAdvisor.First().Email)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Phone)
+                    @Html.DisplayNameFor(model => model.DataAdvisor.First().Phone)
                 </th>
                 <th class="text-center">
                     Počet smluv
@@ -42,7 +61,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model) {
+            @foreach (var item in Model.DataAdvisor) {
                 <tr>
                     <td class="fw-bold">
                         @Html.DisplayFor(modelItem => item.BirthNumber)

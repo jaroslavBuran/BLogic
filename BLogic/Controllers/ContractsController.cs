@@ -24,13 +24,33 @@ namespace BLogic.Controllers
         }
 
         // GET: Contracts
-        public async Task<IActionResult> Index()
+        public IActionResult Index(string selectedStatus = "")
         {
-            return View(await _context.Contract
+            var vm = new FilterViewModel();
+
+            var list = new List<SelectListItem>();
+
+            var data = _context.Contract
                 .Include(c => c.Client)
                 .Include(ac => ac.AdvisorContracts)
                 .ThenInclude(a => a.Advisor)
-                .ToListAsync());
+                .AsQueryable();
+
+            foreach (Contract contract in data)
+            {
+                list.Add(new SelectListItem { Value = contract.Client.BirthNumber, Text = $"{contract.Client.FirstName} {contract.Client.LastName}" });
+            }
+
+            vm.Statuses = list;
+
+            if (!String.IsNullOrEmpty(selectedStatus))
+            {
+                data = data.Where(c => c.Client.BirthNumber == selectedStatus);
+            }
+
+            vm.DataContract = data.ToList();
+
+            return View(vm);
         }
 
         // GET: Contracts/Details/5
@@ -107,21 +127,35 @@ namespace BLogic.Controllers
         }
 
         // GET: Contracts/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, string selectedStatus = "")
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var contract = await _context.Contract.Where(c => c.ContractId == id).Include(cl => cl.Client).Include(ac => ac.AdvisorContracts).ThenInclude(a => a.Advisor).FirstOrDefaultAsync(m => m.ContractId == id);
-            
-   
+            var contract = await _context.Contract
+                .Where(c => c.ContractId == id)
+                .Include(cl => cl.Client).Include(ac => ac.AdvisorContracts)
+                .ThenInclude(a => a.Advisor)
+                .FirstOrDefaultAsync(m => m.ContractId == id);
+
+            var list = new List<SelectListItem>();
+
+            var data = _context.Advisor.AsQueryable();
+
+            foreach (Advisor advisor in data)
+            {
+                list.Add(new SelectListItem { Value = advisor.BirthNumber, Text = $"{advisor.FirstName} {advisor.LastName}" });
+            }
+
             if (contract == null)
             {
                 return NotFound();
             }
-            return View(contract);
+
+            ViewBag.AllAdvisors = list;
+            return View(contract); 
         }
 
         // POST: Contracts/Edit/5
@@ -142,7 +176,7 @@ namespace BLogic.Controllers
             if (ModelState.IsValid)
             {
                 try
-                { // button na přidání poradce?
+                {
                     contract.Client = client;
                     _context.Update(contract);
                     await _context.SaveChangesAsync();
@@ -202,7 +236,7 @@ namespace BLogic.Controllers
         public async Task<IActionResult> DeleteAdvisor(int id, int ContractId)
         {
             var advisor = await _context.Advisor.FindAsync(id);
-            //tady je to potřeba dořešit nějaké try catch?
+            
             var contract = await _context.Contract.Where(c => c.ContractId == ContractId).Include(ac => ac.AdvisorContracts).ThenInclude(a => a.Advisor).FirstOrDefaultAsync(m => m.ContractId == ContractId);
             foreach (var advor in contract.AdvisorContracts
                 .Where(a => a.ContractId == ContractId).Where(i => i.AdvisorId == id))
@@ -214,5 +248,24 @@ namespace BLogic.Controllers
 
             return RedirectToAction("Edit",new {id = ContractId});
         }
+        /*
+        [HttpPost]
+        public IActionResult Add(int ContractId, string AdvisorBN)
+        {
+            var contract = _context.Contract.Where(i => i.ContractId == ContractId).Include(ac => ac.AdvisorContracts).First();
+            var advisor = _context.Advisor.Where(bn => bn.BirthNumber == AdvisorBN).First();
+
+            contract.AdvisorContracts.Add(new AdvisorContract { Advisor = advisor, AdvisorId = advisor.AdvisorId, Contract = contract, ContractId = contract.ContractId });
+            _context.SaveChanges();
+
+            var after = _context.Contract
+                .Where(i => i.ContractId == ContractId)
+                .Include(c => c.Client)
+                .Include(ac => ac.AdvisorContracts)
+                .ThenInclude(a => a.Advisor)
+                .First();
+
+            return View("Edit",after);
+        }*/
     }
 }

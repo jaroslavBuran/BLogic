@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BLogic.Models.Contracts.Contract>
+﻿@model FilterViewModel
 
 @{
     ViewData["Title"] = "Seznam smluv";
@@ -18,19 +18,38 @@
     <div class="col">
         <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;Přidat smlouvu</a>
     </div>
+    <div class="col text-end">
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                Filtry
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li>
+                    <div class="dropdown-item rounded">
+                        @using(Html.BeginForm("Index","Contracts",FormMethod.Get))
+                        {
+                            <label class="fw-bold">Výpis podle jména klienta</label>
+                            @Html.DropDownListFor(f=>f.SelectedStatus,Model.Statuses,"Vyberte")
+                            <input type="submit" value="Filtrovat" class="btn btn-primary" />
+                        }
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 <div class="table-responsive-sm">
     <table class="table table-striped align-middle">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.EvidenceNumber)
+                    @Html.DisplayNameFor(model => model.DataContract.First().EvidenceNumber)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ClosureDate)
+                    @Html.DisplayNameFor(model => model.DataContract.First().ClosureDate)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ValidityDate)
+                    @Html.DisplayNameFor(model => model.DataContract.First().ValidityDate)
                 </th>
                 <th>
                     Klient
@@ -42,7 +61,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model) {
+            @foreach (var item in Model.DataContract) {
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.EvidenceNumber)
