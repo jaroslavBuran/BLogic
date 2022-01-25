@@ -7,12 +7,11 @@
 <form id="main" method="post"></form>
 <form id="sub" method="post"></form>
 <form id="delSingle" method="post"></form>
-@Html.HiddenFor(model => model.ContractId, new{form="main"})
-@Html.HiddenFor(model => model.Client.ClientId, new{form="main"})
-
-<div class="row text-center"> 
-    <h1 class="mb-0">Úpravy smlouvy</h1>
-</div>
+    @Html.HiddenFor(model => model.ContractId, new{form="main"})
+    @Html.HiddenFor(model => model.Client.ClientId, new{form="main"})
+    <div class="row text-center"> 
+        <h1 class="mb-0">Úpravy smlouvy</h1>
+    </div>
     <div class="row justify-content-center">
         <div class="col-3 col-md-1">
             <hr class="mb-md-4"/>
@@ -109,14 +108,14 @@
         </div>
     </div>
     <div class="row mb-4">
-        <div class="col-12 col-md-auto">
+        <div class="col-auto">
                 <div class="input-group">
                 @Html.HiddenFor(model => model.ContractId,new{form = "sub"})
                 @Html.DropDownList("BirthNumber",new SelectList(ViewBag.AllAdvisors,"Value","Text"), new {@class="form-control form-select rounded", form = "sub"})
                 <span class="input-group-btn"><button type="submit" class="btn btn-primary" asp-action="Add" form="sub">Přidat</button></span>
                 </div>
         </div>
-        <div class="col-12 col-md text-center mt-3 mt-md-0">
+        <div class="col">
             <a asp-controller="Advisors" asp-action="Create" class="btn btn-primary" asp-route-id="@Model.ContractId" asp-route-returnurl="@Context.Request.Path.Value.ToString()"><i class="fas fa-plus"></i>&nbsp;Přidat nového</a>
         </div>
         <div class="col">
@@ -152,6 +151,12 @@
         </div>
     </div>
 
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
 }
