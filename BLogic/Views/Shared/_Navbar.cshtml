@@ -5,16 +5,16 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" id="navbarToggler">
-            <ul class="navbar-nav flex-grow-1">
+            <ul class="navbar-nav flex-grow-1 align-items-end align-items-md-start">
                 @if (this.User.Identity.IsAuthenticated)
                 {
-                    <li class="nav-item">
+                    <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString() == "Contracts"?"active":"")">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Contracts" asp-action="Index">Smlouvy</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString() == "Clients"?"active":"")">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Clients" asp-action="Index">Klienti</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString() == "Advisors"?"active":"")">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Advisors" asp-action="Index">Poradci</a>
                     </li>
                 }   

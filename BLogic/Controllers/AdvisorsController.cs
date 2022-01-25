@@ -99,7 +99,6 @@ namespace BLogic.Controllers
                 {
                     _context.Add(advisor);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Index");
                 }
 
                 if (returnUrl != null)
@@ -121,6 +120,7 @@ namespace BLogic.Controllers
                         return Redirect(returnUrl);
                     } 
                 }
+                return RedirectToAction("Index");
             }
             return View(advisor);
         }

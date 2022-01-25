@@ -155,7 +155,8 @@ namespace BLogic.Controllers
             }
 
             ViewBag.AllAdvisors = list;
-            return View(contract); 
+            
+            return View(contract);
         }
 
         // POST: Contracts/Edit/5
@@ -248,24 +249,26 @@ namespace BLogic.Controllers
 
             return RedirectToAction("Edit",new {id = ContractId});
         }
-        /*
+        
         [HttpPost]
-        public IActionResult Add(int ContractId, string AdvisorBN)
+        public IActionResult Add(int ContractId, string BirthNumber)
         {
             var contract = _context.Contract.Where(i => i.ContractId == ContractId).Include(ac => ac.AdvisorContracts).First();
-            var advisor = _context.Advisor.Where(bn => bn.BirthNumber == AdvisorBN).First();
+            var advisor = _context.Advisor.Where(bn => bn.BirthNumber == BirthNumber).First();
 
-            contract.AdvisorContracts.Add(new AdvisorContract { Advisor = advisor, AdvisorId = advisor.AdvisorId, Contract = contract, ContractId = contract.ContractId });
-            _context.SaveChanges();
+            bool isAdvisor = contract.AdvisorContracts.Any(a => a.Advisor == advisor);
 
-            var after = _context.Contract
-                .Where(i => i.ContractId == ContractId)
-                .Include(c => c.Client)
-                .Include(ac => ac.AdvisorContracts)
-                .ThenInclude(a => a.Advisor)
-                .First();
-
-            return View("Edit",after);
-        }*/
+            if (isAdvisor)
+            {
+                TempData["Message"] = "Poradce je u této smlouvy již evidován!";
+            }
+            else
+            {
+                contract.AdvisorContracts.Add(new AdvisorContract { Advisor = advisor, AdvisorId = advisor.AdvisorId, Contract = contract, ContractId = contract.ContractId });
+                _context.SaveChanges();
+            }
+            
+            return RedirectToAction("Edit", new {id = ContractId});
+        }
     }
 }
