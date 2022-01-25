@@ -140,7 +140,8 @@ namespace BLogic.Controllers
 
             var contract = await _context.Contract
                 .Where(c => c.ContractId == id)
-                .Include(cl => cl.Client).Include(ac => ac.AdvisorContracts)
+                .Include(cl => cl.Client)
+                .Include(ac => ac.AdvisorContracts)
                 .ThenInclude(a => a.Advisor)
                 .FirstOrDefaultAsync(m => m.ContractId == id);
 
@@ -171,10 +172,11 @@ namespace BLogic.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
             int id,
-            [Bind("ContractId,EvidenceNumber,ClosureDate,ValidityDate")] Contract contract,
+            [Bind("ContractId,EvidenceNumber,ClosureDate,ValidityDate,AdvisorContracts")] Contract contract,
             [Bind("ClientId,FirstName,LastName,Email,Phone,BirthNumber,Age")] Client client,
             [Bind("AdvisorId,FirstName,LastName,Email,Phone,BirthNumber,Age")]Advisor advisor)
         {
+
             if (id != contract.ContractId)
             {
                 return NotFound();
@@ -185,6 +187,7 @@ namespace BLogic.Controllers
                 try
                 {
                     contract.Client = client;
+                    _context.Update(advisor);
                     _context.Update(contract);
                     await _context.SaveChangesAsync();
                 }
