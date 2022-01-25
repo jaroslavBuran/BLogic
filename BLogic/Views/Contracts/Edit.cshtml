@@ -122,9 +122,9 @@
         </div>
         <div class="col-4 col-md-3">
             <div class="form-group">
-                <label asp-for="Client.Age"></label>
-                <input asp-for="Client.Age" class="form-control" form="main"/>
-                <span asp-validation-for="Client.Age" class="text-danger fw-bold"></span>
+                <label asp-for="AdvisorContracts.First().Advisor.Age"></label>
+                <input asp-for="AdvisorContracts.First().Advisor.Age" class="form-control" form="main"/>
+                <span asp-validation-for="AdvisorContracts.First().Advisor.Age" class="text-danger fw-bold"></span>
             </div>
         </div>
         <div class="col-12 col-md-3">
