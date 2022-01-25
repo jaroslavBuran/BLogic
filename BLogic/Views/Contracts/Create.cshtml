@@ -13,7 +13,7 @@
             <hr class="mb-md-5"/>
         </div>
     </div>
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-12 col-md-3">
             <div class="form-group mb-2 mb-md-0">
                 <label asp-for="EvidenceNumber" class="control-label"></label>
@@ -37,104 +37,39 @@
         </div>
         <hr class="my-4" />
     </div>
-    <div class="row">
-        <div class="col mb-2">
-            <h4>Klient</h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 col-md-3">
-            <div class="form-group">
-                <label asp-for="Client.FirstName"></label>
-                <input asp-for="Client.FirstName" class="form-control" placeholder="Martin"/>
-                <span asp-validation-for="Client.FirstName" class="text-danger fw-bold"></span>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6">
+            <div class="row text-center justify-content-center">
+                <h4>Klient</h4>
+                <div class="col-12 col-md-auto text-center">
+                    <div class="input-group">
+                        @Html.HiddenFor(model => model.Client.BirthNumber)
+                        @Html.DropDownList("ClientBirthNumber",new SelectList(ViewBag.Clients,"Value","Text"), new {@class="form-control form-select rounded"})
+                    </div>
+                </div>
+                <div class="col-md-auto mt-2 mt-md-0">
+                    <a class="btn btn-primary" asp-controller="Clients" asp-action="Create" asp-route-returnurl="@Context.Request.Path.ToString()">
+                        <i class="fas fa-plus"></i> Vytvořit nového klienta
+                        </a>
+                </div>
             </div>
         </div>
-        <div class="col-12 col-md-3">
-            <div class="form-group">
-                <label asp-for="Client.LastName"></label>
-                <input asp-for="Client.LastName" class="form-control" placeholder="Novák"/>
-                <span asp-validation-for="Client.LastName" class="text-danger fw-bold"></span>
+        <div class="col-12 col-md-6">
+            <div class="row text-center justify-content-center mt-3 mt-md-0">
+                <h4>Správce smlouvy</h4>
+                <div class="col-12 col-md-auto">
+                    <div class="input-group">
+                        @Html.HiddenFor(model => model.Advisor.BirthNumber)
+                        @Html.DropDownList("AdvisorBirthNumber",new SelectList(ViewBag.Advisors,"Value","Text"), new {@class="form-control form-select rounded"})
+                    </div>
+                </div>
+                <div class="col-md-auto mt-2 mt-md-0">
+                    <a class="btn btn-primary" asp-controller="Advisors" asp-action="Create" asp-route-returnurl="@Context.Request.Path.ToString()">
+                        <i class="fas fa-plus"></i> Vytvořit nového poradce
+                        </a>
+                </div>
             </div>
-        </div>
-        <div class="col-8 col-md-3">
-            <div class="form-group">
-                <label asp-for="Client.BirthNumber"></label>
-                <input asp-for="Client.BirthNumber" class="form-control" placeholder="1234567890"/>
-                <span asp-validation-for="Client.BirthNumber" class="text-danger fw-bold"></span>
-            </div>
-        </div>
-        <div class="col-4 col-md-3">
-            <div class="form-group">
-                <label asp-for="Client.Age"></label>
-                <input asp-for="Client.Age" class="form-control" min="1"/>
-                <span asp-validation-for="Client.Age" class="text-danger fw-bold"></span>
-            </div>
-        </div>
-        <div class="col-12 col-md-3">
-            <div class="form-group">
-                <label asp-for="Client.Email"></label>
-                <input asp-for="Client.Email" class="form-control" placeholder="jmeno@domena.cz"/>
-                <span asp-validation-for="Client.Email" class="text-danger fw-bold"></span>
-            </div>
-        </div>
-        <div class="col-12 col-md-3">
-            <div class="form-group">
-                <label asp-for="Client.Phone"></label>
-                <input asp-for="Client.Phone" class="form-control" placeholder="777000999"/>
-                <span asp-validation-for="Client.Phone" class="text-danger fw-bold"></span>
-            </div>
-        </div>
-        <hr class="my-4" />
-    </div>
-    <div class="row">
-        <div class="col mb-2">
-            <h4>Správce smlouvy</h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 col-md-3">
-            <div class="form-group">
-                <label asp-for="Advisor.FirstName"></label>
-                <input asp-for="Advisor.FirstName" class="form-control" placeholder="Martin"/>
-                <span asp-validation-for="Advisor.FirstName" class="text-danger fw-bold"></span>
-            </div>
-        </div>
-        <div class="col-12 col-md-3">
-            <div class="form-group">
-                <label asp-for="Advisor.LastName"></label>
-                <input asp-for="Advisor.LastName" class="form-control" placeholder="Novák"/>
-                <span asp-validation-for="Advisor.LastName" class="text-danger fw-bold"></span>
-            </div>
-        </div>
-        <div class="col-8 col-md-3">
-            <div class="form-group">
-                <label asp-for="Advisor.BirthNumber"></label>
-                <input asp-for="Advisor.BirthNumber" class="form-control" placeholder="1234567890"/>
-                <span asp-validation-for="Advisor.BirthNumber" class="text-danger fw-bold"></span>
-            </div>
-        </div>
-        <div class="col-4 col-md-3">
-            <div class="form-group">
-                <label asp-for="Advisor.Age"></label>
-                <input asp-for="Advisor.Age" class="form-control" min="1"/>
-                <span asp-validation-for="Advisor.Age" class="text-danger fw-bold"></span>
-            </div>
-        </div>
-        <div class="col-12 col-md-3">
-            <div class="form-group">
-                <label asp-for="Advisor.Email"></label>
-                <input asp-for="Advisor.Email" class="form-control" placeholder="jmeno@domena.cz"/>
-                <span asp-validation-for="Advisor.Email" class="text-danger fw-bold"></span>
-            </div>
-        </div>
-        <div class="col-12 col-md-3">
-            <div class="form-group">
-                <label asp-for="Advisor.Phone"></label>
-                <input asp-for="Advisor.Phone" class="form-control" placeholder="777000999"/>
-                <span asp-validation-for="Advisor.Phone" class="text-danger fw-bold"></span>
-            </div>
-        </div>
+        </div>    
     </div>
     <div class="row mt-5 justify-content-center">
         <div class="col text-center">

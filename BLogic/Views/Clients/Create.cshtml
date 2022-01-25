@@ -4,7 +4,7 @@
     ViewData["Title"] = "Přidat klienta";
 }
 
-<form method="post">
+<form method="post" asp-route-returnurl="@ViewBag.ReturnUrl">
     <div class="row text-center"> 
         <h1 class="mb-0">Nový klient</h1>
     </div>

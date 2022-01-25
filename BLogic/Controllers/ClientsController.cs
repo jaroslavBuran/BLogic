@@ -70,8 +70,9 @@ namespace BLogic.Controllers
         }
 
         // GET: Clients/Create
-        public IActionResult Create()
+        public IActionResult Create(string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -80,7 +81,7 @@ namespace BLogic.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientId,FirstName,LastName,Email,Phone,BirthNumber,Age")] Client client)
+        public async Task<IActionResult> Create([Bind("ClientId,FirstName,LastName,Email,Phone,BirthNumber,Age")] Client client, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -96,6 +97,10 @@ namespace BLogic.Controllers
                 {
                     _context.Add(client);
                     await _context.SaveChangesAsync();
+                    if (returnUrl != null)
+                    {
+                        return Redirect(returnUrl);
+                    }
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -153,30 +158,21 @@ namespace BLogic.Controllers
             return View(client);
         }
 
-        // GET: Clients/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var client = await _context.Client
-                .FirstOrDefaultAsync(m => m.ClientId == id);
-            if (client == null)
-            {
-                return NotFound();
-            }
-
-            return View(client);
-        }
-
         // POST: Clients/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var client = await _context.Client.FindAsync(id);
+            var contracts = _context.Contract.Where(c => c.Client == client).DefaultIfEmpty();
+
+            if (contracts.First() != null)
+            {
+                foreach (var contract in contracts)
+                {
+                    _context.Contract.Remove(contract);
+                }
+            }
             _context.Client.Remove(client);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
