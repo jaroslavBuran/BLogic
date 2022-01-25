@@ -10,6 +10,7 @@
 @Html.HiddenFor(model => model.ContractId, new{form="main"})
 @Html.HiddenFor(model => model.Client.ClientId, new{form="main"})
 @Html.HiddenFor(model => model.AdvisorContracts.First().Advisor.AdvisorId, new{form="main"})
+@Html.HiddenFor(model => model.AdvisorContracts, new{form="main"})
 
 <div class="row text-center"> 
     <h1 class="mb-0">Úpravy smlouvy</h1>
