@@ -26,13 +26,13 @@ namespace BLogic.Controllers
             var vm = new FilterViewModel();
 
             var list = new List<SelectListItem>();
-
+            
             var data = _context.Advisor
                 .Include(ac => ac.AdvisorContracts)
                 .ThenInclude(a => a.Contract)
                 .ThenInclude(c => c.Client)
                 .AsQueryable();
-
+            
             foreach (Advisor advisor in data)
             {
                 list.Add(new SelectListItem { Value = advisor.BirthNumber, Text = $"{advisor.FirstName} {advisor.LastName}" });
@@ -72,7 +72,7 @@ namespace BLogic.Controllers
         }
 
         // GET: Advisors/Create
-        public IActionResult Create(int? id, string returnUrl = null)
+        public IActionResult Create(string returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
@@ -176,30 +176,18 @@ namespace BLogic.Controllers
             return View(advisor);
         }
 
-        // GET: Advisors/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var advisor = await _context.Advisor
-                .FirstOrDefaultAsync(m => m.AdvisorId == id);
-            if (advisor == null)
-            {
-                return NotFound();
-            }
-
-            return View(advisor);
-        }
-
         // POST: Advisors/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var advisor = await _context.Advisor.FindAsync(id);
+            var advisor = await _context.Advisor.Include(ac => ac.AdvisorContracts).Where(i => i.AdvisorId == id).FirstOrDefaultAsync();
+            var contractCount = advisor.AdvisorContracts.Count;
+            if (contractCount > 0)
+            {
+                TempData["Message"] = "Poradce nelze odstranit, je přiřazen u jedné nebo více smluv!";
+                return RedirectToAction(nameof(Index));
+            }
             _context.Advisor.Remove(advisor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

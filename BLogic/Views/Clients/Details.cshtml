@@ -44,7 +44,7 @@
     <div class="col text-center">
         <form asp-action="Delete" asp-route-id="@Model.ClientId" method="post">
             <span id="confirmDeleteSpan" style="display:none">
-                <h5 class="fw-bold mt-1">Opravdu chcete odstranit tohoto klienta?<br /></h5>
+                <h5 class="fw-bold mt-1">Opravdu&nbsp;ostranit?<br /><span class="text-danger">(Odstraníte tím&nbsp;i všechny jeho smlouvy!)</span></h5>
                     <button type="submit" class="btn btn-danger">Ano</button>
                 <a href="#" class="btn btn-primary" onclick="confirmSelfDelete(false)">Ne</a>
             </span>

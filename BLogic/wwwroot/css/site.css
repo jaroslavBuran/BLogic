@@ -41,8 +41,8 @@ a {
     }
 }
 
-.dropdown-menu {
-    background: linear-gradient(to right, #83a4d4, #b6fbff) !important;
+.navbar-nav > li > .dropdown-menu {
+    background-color: rgba(182, 251, 255, 0.4) !important;
 }
 
 .dropdown-item:hover {

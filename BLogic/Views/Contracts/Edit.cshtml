@@ -108,7 +108,7 @@
             <h4>Ostatní poradci</h4>
         </div>
     </div>
-    <div class="row mb-4">
+    <div class="row">
         <div class="col-12 col-md-auto">
                 <div class="input-group">
                 @Html.HiddenFor(model => model.ContractId,new{form = "sub"})
@@ -116,13 +116,15 @@
                 <span class="input-group-btn"><button type="submit" class="btn btn-primary" asp-action="Add" form="sub">Přidat</button></span>
                 </div>
         </div>
-        <div class="col-12 col-md text-center mt-3 mt-md-0">
-            <a asp-controller="Advisors" asp-action="Create" class="btn btn-primary" asp-route-id="@Model.ContractId" asp-route-returnurl="@Context.Request.Path.Value.ToString()"><i class="fas fa-plus"></i>&nbsp;Přidat nového</a>
+        <div class="col-12 col-md-auto text-center text-md-start mt-3 mt-md-0">
+            <a asp-controller="Advisors" asp-action="Create" class="btn btn-primary" asp-route-id="@Model.ContractId" asp-route-returnurl="@Context.Request.Path.Value.ToString()">
+                <i class="fas fa-plus"></i>&nbsp;Přidat nového
+            </a>
         </div>
-        <div class="col">
+        <div class="col mt-3 mt-md-0">
             @if (TempData["Message"] != null)
             {
-                <div class="row justify-content-center mb-5">
+                <div class="row justify-content-center">
                     <div class="col-auto text-center fw-bold text-danger">
                         <h3>@TempData["Message"]</h3>
                     </div>
@@ -130,7 +132,7 @@
             }
         </div>
     </div>
-    <div class="row justify-content-center justify-content-md-start">
+    <div class="row justify-content-center justify-content-md-start mt-4">
         @foreach (var advisor in Model.AdvisorContracts)
             {
                 if (advisor != Model.AdvisorContracts.First())

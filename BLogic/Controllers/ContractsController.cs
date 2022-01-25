@@ -38,7 +38,8 @@ namespace BLogic.Controllers
 
             foreach (Contract contract in data)
             {
-                list.Add(new SelectListItem { Value = contract.Client.BirthNumber, Text = $"{contract.Client.FirstName} {contract.Client.LastName}" });
+                list.Add(new SelectListItem { Value = contract.Client.BirthNumber,
+                    Text = $"RČ: {contract.Client.BirthNumber} - {contract.Client.FirstName} {contract.Client.LastName}" });
             }
 
             vm.Statuses = list;
@@ -74,9 +75,33 @@ namespace BLogic.Controllers
             return View(contract);
         }
 
-        // GET: Contracts/Create
         public IActionResult Create()
         {
+            var clients = _context.Client.AsQueryable();
+            var listClients = new List<SelectListItem>();
+            foreach (var client in clients)
+            {
+                listClients.Add(new SelectListItem
+                {
+                    Value = client.BirthNumber,
+                    Text = $"RČ: {client.BirthNumber} - {client.FirstName} {client.LastName}"
+                });
+            }
+
+            var advisors = _context.Advisor.AsQueryable();
+            var listAdvisors = new List<SelectListItem>();
+            foreach (var advisor in advisors)
+            {
+                listAdvisors.Add(new SelectListItem
+                {
+                    Value = advisor.BirthNumber,
+                    Text = $"RČ: {advisor.BirthNumber} - {advisor.FirstName} {advisor.LastName}"
+                });
+            }
+
+            ViewBag.Clients = listClients;
+            ViewBag.Advisors = listAdvisors;
+
             return View();
         }
 
@@ -86,35 +111,14 @@ namespace BLogic.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("ContractId,EvidenceNumber,ClosureDate,ValidityDate")] Contract contract, 
-            [Bind("ClientId,FirstName,LastName,Email,Phone,BirthNumber,Age")] Client client,
-            [Bind("AdvisorId,FirstName,LastName,Email,Phone,BirthNumber,Age")]Advisor advisor)
+            [Bind("ContractId,EvidenceNumber,ClosureDate,ValidityDate")] Contract contract,
+            string ClientBirthNumber, string AdvisorBirthNumber)
         {
+            Client client = await _context.Client.Where(b => b.BirthNumber == ClientBirthNumber).SingleAsync();
+            Advisor advisor = await _context.Advisor.Where(b => b.BirthNumber == AdvisorBirthNumber).Include(ac => ac.AdvisorContracts).SingleAsync();
+
             if (ModelState.IsValid)
             {
-                //hledám, zda se klient a/nebo poradce již nachází v db
-                bool isClient = _context.Client.Any(bn => bn.BirthNumber == client.BirthNumber);
-                bool isAdvisor = _context.Advisor.Any(bn => bn.BirthNumber == advisor.BirthNumber);
-
-                if (isClient)
-                {
-                    client = _context.Client.Where(bn => bn.BirthNumber == client.BirthNumber).First();
-                }
-                else
-                {
-                    _context.Add(client);
-                }
-
-                if (isAdvisor)
-                {
-                    advisor = _context.Advisor.Where(bn => bn.BirthNumber == advisor.BirthNumber).First();
-                }
-                else
-                {
-                    _context.Add(advisor);
-                }
-
-
                 contract.Client = client;
                 _context.Add(contract);
                 _context.Add(new AdvisorContract { Advisor = advisor, AdvisorId = advisor.AdvisorId, Contract = contract, ContractId = contract.ContractId });
@@ -146,7 +150,8 @@ namespace BLogic.Controllers
 
             foreach (Advisor advisor in data)
             {
-                list.Add(new SelectListItem { Value = advisor.BirthNumber, Text = $"{advisor.FirstName} {advisor.LastName}" });
+                list.Add(new SelectListItem { Value = advisor.BirthNumber,
+                    Text = $"RČ: {advisor.BirthNumber} - {advisor.FirstName} {advisor.LastName}" });
             }
 
             if (contract == null)
@@ -198,28 +203,10 @@ namespace BLogic.Controllers
             return View(contract);
         }
 
-        // GET: Contracts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var contract = await _context.Contract
-                .FirstOrDefaultAsync(m => m.ContractId == id);
-            if (contract == null)
-            {
-                return NotFound();
-            }
-
-            return View(contract);
-        }
-
         // POST: Contracts/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var contract = await _context.Contract.FindAsync(id);
             _context.Contract.Remove(contract);

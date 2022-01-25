@@ -14,6 +14,14 @@
         <hr class="mb-md-4"/>
     </div>
 </div>
+@if (TempData["Message"] != null)
+    {
+        <div class="row justify-content-center mb-5">
+            <div class="col text-center fw-bold text-danger">
+                <h1>@TempData["Message"]</h1>
+            </div>
+        </div>
+    }
 <div class="row">
     <div class="col">
         <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;Přidat poradce</a>
