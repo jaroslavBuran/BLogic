@@ -172,7 +172,8 @@ namespace BLogic.Controllers
         public async Task<IActionResult> Edit(
             int id,
             [Bind("ContractId,EvidenceNumber,ClosureDate,ValidityDate")] Contract contract,
-            [Bind("ClientId,FirstName,LastName,Email,Phone,BirthNumber,Age")] Client client)
+            [Bind("ClientId,FirstName,LastName,Email,Phone,BirthNumber,Age")] Client client,
+            [Bind("AdvisorId,FirstName,LastName,Email,Phone,BirthNumber,Age")]Advisor advisor)
         {
             if (id != contract.ContractId)
             {
